@@ -1,8 +1,9 @@
-name: Deploy to Shared PostgreSQL DB
+name: Deploy to PostgreSQL
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -10,30 +11,27 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        image: postgres
         env:
-          POSTGRES_USER: shared_user
-          POSTGRES_PASSWORD: 123
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: shared_db
         ports:
-          - 5433:5432
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
-    env:
-      ConnectionStrings__DefaultConnection: Host=localhost;Port=5433;Username=shared_user;Password=123;Database=shared_db
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -41,5 +39,21 @@ jobs:
       - name: Build the project
         run: dotnet build --no-restore
 
-      - name: Apply EF Core migrations
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add dotnet tools to PATH
+        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "Waiting for PostgreSQL..."
+            sleep 3
+          done
+
+      - name: Run database migrations
+        env:
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=shared_db"
         run: dotnet ef database update
