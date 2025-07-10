@@ -1,4 +1,4 @@
-name: Deploy to PostgreSQL
+name: Deploy
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:15
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -19,41 +19,35 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DOTNET_ROOT: /usr/share/dotnet
+      ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=shared_db
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET SDK
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: 8.0.x
+
+      - name: Install dotnet-ef CLI (v8.0.5)
+        run: dotnet tool install --global dotnet-ef --version 8.0.5
+
+      - name: Add .dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build the project
+      - name: Build project
         run: dotnet build --no-restore
 
-      - name: Install dotnet-ef tool
-        run: dotnet tool install --global dotnet-ef
-
-      - name: Add dotnet tools to PATH
-        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          for i in {1..10}; do
-            pg_isready -h localhost -p 5432 && break
-            echo "Waiting for PostgreSQL..."
-            sleep 3
-          done
-
-      - name: Run database migrations
-        env:
-          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=shared_db"
+      - name: Apply database migrations
         run: dotnet ef database update
