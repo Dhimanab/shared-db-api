@@ -13,7 +13,7 @@ namespace SharedDbApi // ✅ matches your project name
     public class DeploymentLog
     {
         public int Id { get; set; }
-        public string Message { get; set; }
-        public DateTime DeployedAt { get; set; } = DateTime.UtcNow;
+        public string? Message { get; set; }  // 👈 Notice the ?
+        public DateTime DeployedAt { get; set; }
     }
 }
