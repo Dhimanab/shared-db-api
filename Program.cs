@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SharedDbApi; // Make sure this matches your project namespace
+using SharedDbApi; // Make sure this matches project namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,20 +9,21 @@ var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connStr));
 
-// Add Swagger / OpenAPI
-builder.Services.AddOpenApi();
+// ✅ Replace AddOpenApi with correct Swagger setup for .NET 8
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Swagger for development
+// ✅ Replace MapOpenApi with proper middleware
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-// Sample endpoint
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild",
