@@ -5,8 +5,11 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
+    env:
+      ConnectionStrings__DefaultConnection: Host=localhost;Port=5433;Username=shared_user;Password=123;Database=shared_db
 
     steps:
       - name: Checkout code
@@ -20,10 +23,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build project
+      - name: Build the project
         run: dotnet build --no-restore
 
-      - name: Run EF Core Migrations
-        env:
-          ConnectionStrings__Default: ${{ secrets.DEFAULT_CONN_STRING }}
+      - name: Apply EF Core migrations
         run: dotnet ef database update
