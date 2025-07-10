@@ -1,0 +1,9 @@
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.csproj.AssemblyReference.cache
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/rpswa.dswa.cache.json
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.GeneratedMSBuildEditorConfig.editorconfig
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.AssemblyInfoInputs.cache
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.AssemblyInfo.cs
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.csproj.CoreCompileInputs.cache
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.MvcApplicationPartsAssemblyInfo.cs
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.MvcApplicationPartsAssemblyInfo.cache
+/Users/abhidhiman/Desktop/dotnet-lab/SharedDbApi/obj/Debug/net8.0/SharedDbApi.sourcelink.json

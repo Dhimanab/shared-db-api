@@ -46,13 +46,13 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[9.0.7, )"
+              "version": "[8.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.7, )"
+              "version": "[8.0.5, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
