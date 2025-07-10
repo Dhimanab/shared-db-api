@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SharedDbApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b918906b7d3200fa676adcb9fb1be897ef99a5e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6427c32d0135230a41ca2d69da4a7a067eaa5274")]
 [assembly: System.Reflection.AssemblyProductAttribute("SharedDbApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SharedDbApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
