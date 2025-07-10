@@ -13,13 +13,13 @@ jobs:
     - name: 📥 Checkout code
       uses: actions/checkout@v3
 
-    - name: 🧰 Install .NET 9 SDK manually
+    - name: 🧰 Install .NET 9 SDK (latest version manually)
       run: |
-        wget https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.3.24172.9/dotnet-sdk-9.0.100-preview.3.24172.9-linux-x64.tar.gz
-        mkdir -p $HOME/dotnet
-        tar -zxf dotnet-sdk-9.0.100-preview.3.24172.9-linux-x64.tar.gz -C $HOME/dotnet
-        echo "$HOME/dotnet" >> $GITHUB_PATH
-        echo "DOTNET_ROOT=$HOME/dotnet" >> $GITHUB_ENV
+        curl -SL https://dotnet.microsoft.com/en-us/download/dotnet/scripts/v1/dotnet-install.sh -o dotnet-install.sh
+        chmod +x dotnet-install.sh
+        ./dotnet-install.sh --channel 9.0
+        echo "$HOME/.dotnet" >> $GITHUB_PATH
+        echo "DOTNET_ROOT=$HOME/.dotnet" >> $GITHUB_ENV
 
     - name: 🛠️ Restore dependencies
       run: dotnet restore
