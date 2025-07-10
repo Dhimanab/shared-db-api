@@ -1,0 +1,44 @@
+name: Deploy to Shared DB
+
+on:
+  push:
+    branches: [ "main" ]  # change if you use a different branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: shared_uni_db
+          POSTGRES_USER: shared_user
+          POSTGRES_PASSWORD: 123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install EF Tools
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Run EF migrations
+      run: |
+        export PATH="$PATH:/home/runner/.dotnet/tools"
+        dotnet ef database update --project SharedDbApi.csproj

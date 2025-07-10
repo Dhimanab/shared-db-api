@@ -1,0 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+
+namespace SharedDbApi // ✅ matches your project name
+{
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options) { }
+
+        public DbSet<DeploymentLog> DeploymentLogs { get; set; }
+    }
+
+    public class DeploymentLog
+    {
+        public int Id { get; set; }
+        public string Message { get; set; }
+        public DateTime DeployedAt { get; set; } = DateTime.UtcNow;
+    }
+}
