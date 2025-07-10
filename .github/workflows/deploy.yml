@@ -1,44 +1,30 @@
-name: Deploy to Shared DB
+name: Deploy to Shared PostgreSQL DB
 
 on:
   push:
-    branches: [ "main" ]  # change if you use a different branch
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: shared_uni_db
-          POSTGRES_USER: shared_user
-          POSTGRES_PASSWORD: 123
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.x'
-
-    - name: Install EF Tools
-      run: dotnet tool install --global dotnet-ef
+        dotnet-version: 8.0.x
 
     - name: Restore dependencies
       run: dotnet restore
 
+    - name: Build
+      run: dotnet build --no-restore
+
     - name: Run EF migrations
-      run: |
-        export PATH="$PATH:/home/runner/.dotnet/tools"
-        dotnet ef database update --project SharedDbApi.csproj
+      env:
+        ConnectionStrings__Default: Host=localhost;Port=5433;Username=shared_user;Password=123;Database=shared_db
+      run: dotnet ef database updateB
+
